@@ -1,0 +1,168 @@
+Debugging Warmup
+----------------
+Q1. How do the values of the member variables of `allBalls[0]` change from iteration to iteration? Specifically, what happens to the values of `_id`, `_x`, and `_y`?
+A1. Between iterations, the values of x and y change by the respective values of vx and vy to show the ball moving. However the value of id remains constant as '0'.
+
+Q2. What is the pattern to how the values of the member variables of the stuck ball change from iteration to iteration?
+A2. The values of x and y changed by the values of vx and vy (the components of the velocity of the ball). Balls stay stuck on the corners when their vx and vy are both 0.
+
+Q3. After forcing the stuck ball to position (0, 0), does the ball move normally from there or does it stay stuck?
+A3. No, the ball does not start moving because we did not edit the vx or vy values.
+
+Q4. On your system, what is the observed consequence of these three memory errors:
+- access an index outside the allocated array bounds?
+- access memory after it has been deallocated?
+- deallocate same memory twice?
+A4. Accessing an index outside of bounds throws an error with vague reasoning- Error: basic_string::_M_create
+    Accessing memory after it has been deallocated does not throw an error at all. Could be problematic when trying to debug but I guess it's because we are just supposed to "assume" the value becomes garbage since other programs can now access that memory.
+    Deallocating the same memory twice also does not throw an error. I wonder if this is how malware operates...
+
+Sorted Array Priority Queue
+---------------------------
+Q5. There are extensive comments in both the interface (`qsortedarray.h`) and implementation (`pqsortedarray.cpp`). Explain how and why the comments in the interface differ from those in the implementation. Consider both the content and audience for the documentation.
+A5. The comments in the interface are written to explain to another programmer, almost like an assignment. The comments in the implementation explain what the function does and how it does it. The comments differ because they are written for different people: programmer and user.
+
+Q6. The class declares member variables `_numAllocated` and `_numFilled`. What is the difference between these two counts and why are both needed?
+A6. '_numAllocated' is needed to keep track of the array size. Since the array will fill up more space than it may have elements, _numFilled is needed to know how many elements are in the array, and when to expand the array size (if _numElements is equal to _numAllocated).
+
+Q7. Detangle the expression in the last line of the `dequeue` function and explain how it returns and removes the frontmost element.
+A7. The 'frontmost' element in the queue has the lowest priority int, making it the highest priority in the queue. The '--' reduces the count of the number of elements while simultaneously returning the value.
+
+Q8. Give the results from your time trials and explain how they support your prediction for the Big-O runtimes of  `enqueue` and `dequeue`.
+A8. Starting with dequeue, the operation time stays relatively constant at around 0 seconds. Indicating an O(1) runtime.
+    I used a for loop to test the runtimes of enqueue, and it is important to note that enqueue's runtime will increase as we add more elements, since it is meant to be O(N)
+    The runtimes I got were:
+    Line 341 TIME_OPERATION fillQueue(pq, 10000) (size =  10000) completed in     0.35 secs
+    Line 349 TIME_OPERATION fillQueue(pq, 20000) (size =  20000) completed in    1.406 secs
+    Line 355 TIME_OPERATION fillQueue(pq, 40000) (size =  40000) completed in    5.645 secs
+    Line 361 TIME_OPERATION fillQueue(pq, 80000) (size =  80000) completed in   22.547 secs
+    We can see the data is being roughly squared each iteration, indicating an O(N^2) runtime for the whole operation to fill queue. However, because the for loop itself has O(N) runtime,
+    the runtime of enqueue can be concluded to also be O(N).
+
+Q9. If the PQSortedArray stored the elements in increasing priority order instead of decreasing priority order, what impact would this have on the Big-O runtimes of `enqueue` and `dequeue`?
+A9. This method of sorting elements shouldn't have an effect on enqueue, as it would just change the condition while retaining the method of iteration. However, dequeue will become dramatically slower because we must now shift the whole array after every dequeue, making its runtime also O(N).
+
+Priority Queue Client Usage
+---------------------------
+Q10. Based on the Big O of `PQSortedArray` `enqueue`/`dequeue`, what do you expect for the Big O runtime of `pqSort`? Run some timing trials to confirm your prediction, and include that data in your answer.
+A10. I predict the Big O runtime of pqSort to be around O(N^2) because the for loop and the enqueue operation both have an O(N) runtime, which will combine to equal O(N^2). We exclude the dequeue operation because it is much faster as O(N) and run consecutively.
+    The data from the provided test is as follows:
+    Line 123 TIME_OPERATION pqSort(v) (size =   1000) completed in    0.002 secs
+    Line 123 TIME_OPERATION pqSort(v) (size =   2000) completed in    0.007 secs
+    Line 123 TIME_OPERATION pqSort(v) (size =   4000) completed in    0.029 secs
+    Line 123 TIME_OPERATION pqSort(v) (size =   8000) completed in    0.116 secs
+    We can see the runtime is O(N^2)
+
+Q11. Based on the Big O of `PQSortedArray` `enqueue`/`dequeue`, what do you expect for the Big O runtime of `topK` in terms of `k` and `n`? Run some timing trials to confirm your prediction, and include that data in your answer.
+A11. Because my 'topk' actually does not utilize pqsort at all, but rather sticks to a simple PQSortedArray and Queue data structure, the Big O runtime is simply O(N).
+     Leaving N constant and changing K gave me:
+        Line 111 TIME_OPERATION topK(stream, k) (size =     10) completed in    0.003 secs
+         Line 111 TIME_OPERATION topK(stream, k) (size =     20) completed in    0.004 secs
+         Line 111 TIME_OPERATION topK(stream, k) (size =     40) completed in     0.01 secs
+         Line 111 TIME_OPERATION topK(stream, k) (size =     80) completed in    0.024 secs
+         Line 111 TIME_OPERATION topK(stream, k) (size =    160) completed in    0.065 secs
+         Line 111 TIME_OPERATION topK(stream, k) (size =    320) completed in     0.18 secs
+         Line 111 TIME_OPERATION topK(stream, k) (size =    640) completed in    0.116 secs
+         Line 111 TIME_OPERATION topK(stream, k) (size =   1280) completed in    0.002 secs
+         Line 111 TIME_OPERATION topK(stream, k) (size =   2560) completed in    0.003 secs
+         Line 111 TIME_OPERATION topK(stream, k) (size =   5120) completed in    0.002 secs
+         Line 111 TIME_OPERATION topK(stream, k) (size =  10240) completed in    0.003 secs
+         Line 111 TIME_OPERATION topK(stream, k) (size =  20480) completed in    0.003 secs
+         Line 111 TIME_OPERATION topK(stream, k) (size =  40960) completed in    0.002 secs
+         Line 111 TIME_OPERATION topK(stream, k) (size =  81920) completed in    0.003 secs
+     Leaving k Constant and changing N gave me:
+        Line 98 TIME_OPERATION topK(stream, k) (size = 200000) completed in    0.469 secs
+         Line 98 TIME_OPERATION topK(stream, k) (size = 400000) completed in    0.907 secs
+         Line 98 TIME_OPERATION topK(stream, k) (size = 800000) completed in    1.736 secs
+         Line 98 TIME_OPERATION topK(stream, k) (size =1600000) completed in    3.444 secs
+     The time operations do not seem to change much when changing k, but do change a lot when changing n, specifically at O(N).
+
+Heap Priority Queue
+-------------------
+Q12. Start with an empty binary heap and enqueue the nine `DataPoint`s in the order shown below and show the result. You only need to show the final heap, not intermediate steps. Draw the heap as tree-like diagram with root element on top, its two children below, and so on.  Yes, we know that we're asking you to draw pictures in a text file (we love the [AsciiFlow](http://asciiflow.com/) tool for "drawing" in text).
+┌─────────┐
+│ "T", 1 }│
+└──┬───┬──┘
+   │   │
+   │   │
+┌──────────┐   │   │         ┌─────────┐
+│{ "B", 3 }◄─┬─┘   └─────────► "G", 2
+}│
+┌───┴────────────┤               └───┬───┬─┘
+│                │                   │   │
+│                │
+│   │
+│                │
+│   │
+┌────▼────┐      ┌────▼───┐      ┌────────┴──┬┤ ┌──────────┐
+│ "S", 6 }│      │ "A", 5 │      │ { "V", 9 }├┴─┤{ "R", 4 }│
+└─────┬─┬─┤      └────────┘      └───────────┘  └──────────┘
+│ └─┴───┐
+│
+│
+│
+│
+┌─────┴───┐   ├┬──────────┐
+│ "O", 8 }│   └┤ "K", 7 } │
+└─────────┘    └──────────┘
+
+Q13. Make two calls to `dequeue` on the above binary heap and draw the updated result.
+┌──────────┐
+│{ "B", 3 }◄┐
+─┴──┬───┬────┘
+   │   │
+   │   │
+   │   │        ┌──────────┐
+┌────◄───┐   │   └────────┤{ "R", 4 }│
+┌─────┤ "A", 5 ◄───┘            └────┬───┬─┘
+│     └────────┐                     │   │
+│              │
+│   │
+│              │
+│   │
+┌────▼───┐          │            ┌────────┴──┬┤  ┌──────────┐
+│ "S", 6 │      ┌───▼─────       │ { "V", 9 }├┴─ │ "K", 7 } │
+└────────┘      │ "O", 8 }       └───────────┘   └──────────┘
+└─────────
+
+Q14. Draw the array representation of the binary heap above. Label each element with its array index.
+  0   1   2  3   4    5  6
+[B3, A5, R4, S6, O8, V9, K7 ]
+
+Q15. Run timing trials and provide your results that confirm that `pqSort` runs in time O(NlogN) and `topK` in O(NlogK).
+A15.
+    pqSort:
+    Line 143 TIME_OPERATION pqSort(v) (size =   1000) completed in        0 secs
+    Line 143 TIME_OPERATION pqSort(v) (size =   2000) completed in    0.002 secs
+    Line 143 TIME_OPERATION pqSort(v) (size =   4000) completed in    0.003 secs
+    Line 143 TIME_OPERATION pqSort(v) (size =   8000) completed in    0.005 secs
+    This confirms O(NlogN)
+
+    topK:
+    constant k:
+    Line 96 TIME_OPERATION topK(stream, k) (size = 200000) completed in    0.485 secs
+    Line 96 TIME_OPERATION topK(stream, k) (size = 400000) completed in    1.047 secs
+    Line 96 TIME_OPERATION topK(stream, k) (size = 800000) completed in    2.127 secs
+    Line 96 TIME_OPERATION topK(stream, k) (size =1600000) completed in    4.436 secs
+    constant n:
+    Line 109 TIME_OPERATION topK(stream, k) (size =    160) completed in    0.034 secs
+    Line 109 TIME_OPERATION topK(stream, k) (size =    320) completed in    0.042 secs
+    Line 109 TIME_OPERATION topK(stream, k) (size =    640) completed in     0.02 secs
+    Line 109 TIME_OPERATION topK(stream, k) (size =   1280) completed in    0.001 secs
+    Line 109 TIME_OPERATION topK(stream, k) (size =   2560) completed in    0.001 secs
+    Line 109 TIME_OPERATION topK(stream, k) (size =   5120) completed in    0.001 secs
+    Line 109 TIME_OPERATION topK(stream, k) (size =  10240) completed in    0.001 secs
+    Line 109 TIME_OPERATION topK(stream, k) (size =  20480) completed in    0.001 secs
+    Line 109 TIME_OPERATION topK(stream, k) (size =  40960) completed in    0.001 secs
+    Line 109 TIME_OPERATION topK(stream, k) (size =  81920) completed in    0.001 secs
+
+    this confirms O(Nlogk) when put together.
+
+Embedded Ethics
+---------------
+Q16. If you were working on constructing  a priority-based system like this, how would you weigh the tradeoff between collecting enough information to make informed decisions about how to allocate support resources to people in need while allowing members of vulnerable populations to maintain their privacy and autonomy?
+A16. When dealing with an issue of a scale such as homelessness, it does become quite easy to overlook privacy in the interest of optimizing. However, in this case I think a good exception can be made for wanting to  collect more data. If the system is to distribute according to need, it will basically need to know all it can to make an informed decision.
+     So while the system may  need a lot of crucial data, it is still possible to give the applicants a measure of privacy, though in a situation as dire as homelessness I think the concerns for privacy do fall quite low. Leaving the person's race, origin, nationality, immigration status, and other unnecessary data are good ways for keeping the database effecient and also mainataining privacy.
+
+Q17. One of the key themes of the embedded ethics content in this course has been the importance of considering the societal and human impact of technical solutions. What is your main takeaway from reading this case study, specifically as it related to ideas around consequences of human ranking/prioritization algorithms? If you were working on a real-world project in the future that required you to reduce complex sources of data into a single numerical ranking or priority score, what factors might you want to consider as you implemented these algorithms?  How would you decide when not to build a system?
+A17. My main takeway is really that we need to be careful. As hard as it was to simply pass a unit test with the PQHeap, programmers need to spend more and more time making sure these data structures are optimized but also non-intrusive and do not exponentially grow inequalities in current society. If I was working on a real-world project that required reducing and ranking complex data, I would really have to consider what inequalities could potentially be worsened and compare that to the problem I'm trying to solve. If the tradeoff is worth it, then it is worth it to build the system.

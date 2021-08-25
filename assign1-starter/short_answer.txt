@@ -1,0 +1,70 @@
+Perfect Numbers
+---------------
+
+Q1. How many numbers does the program search through? How many perfect numbers does it find? What are these perfect numbers?
+A1: 40000 numbers searched through. 4 perfect numbers found. The perfect numbers are 6, 28, 496, and 8128.
+
+Q2. Record the timing results for `findPerfects` into a table.
+A2: 
+Search Size: 20000  Runtime: 0.594 secs
+Search Size: 40000  Runtime: 1.803 secs
+Search Size: 80000  Runtime: 6.622 secs
+Search Size: 160000 Runtime: 25.735 secs
+Search Size: 320000 Runtime: 100.86 secs
+Search Size: 640000 Runtime: 393.901 secs
+
+Q3. Does it take the same amount of effort to compute `isPerfect` on the number 10 as it does on the number 1000? Why or why not? Does it take the same amount of work for `findPerfects` to search the range of numbers from 1-1000 as it does to search the numbers from 1000-2000? Why or why not?
+A3: No, it takes different amounts of effort to compute 'isPerfect' because the number '1000' is greater than number '10' and the for loop in the function divisorSum() runs through all numbers in the range the number 1000 will take more effort to compute.
+    No, it takes different amounts of work for 'findPerfects' to search from '0-1000' and '1000-2000' because the function runs isPerfect() on every number in the range. Since the all numbers in the range '1000-2000' are greater than '0-1000', the computation will take longer since it must check every number starting from 0.
+
+Q4. Extrapolate from the data you gathered and make a prediction: how long will it take `findPerfects` to reach the fifth perfect number?
+A4: TODO: Knowing that the fifth perfect number is 33550336 and has 8 digits while the highest we checked was 640000 with 6 digits.
+    From the data, we can see an exponential relationship between the runtime and the search size.
+    If we run the data in the table through a power regression algorithm, we find the equation to model this function is Runtime = 3.79E-09(Search Size)^1.89. \
+    Plugging in the term '33550336' returns an estimate of about 634170.89 seconds, or roughly 176 hours. yikes!
+
+Q5. Do any of the tests still pass even with this broken function? Why or why not?
+A5: Some tests do still pass with this broken function such as negative numbers not being perfect and returning non-perfect positive numbers as false.
+    It can be assumed these cases pass because the negative case logic wasn't changed and the set of "perfect numbers" was altered by changing the initial total from 0 to 1.
+
+Q6. Can the test framework detect that the test case is "bogus", in the sense that the premise of the test case itself is off-base?
+A6: No, the test framework cannot detect when a test case is 'bogus'.
+
+Q7. Describe the testing strategy your used for your test cases to confirm `smarterSum` is working correctly.
+A7: To confirm 'smarterSum' is functionally equivalent to the older function,
+    the testing strategy is just going to be making sure that every test case that works for divisorSum() and isPerfect() also passes in smarterSum() and isPerfectSmarter()
+
+Q8. Record your timing results for `findPerfectsSmarter` into a table.
+A8: 
+Search Size: 20000  Runtime: 0.202
+Search Size: 40000  Runtime: 0.234
+Search Size: 80000  Runtime: 0.353
+Search Size: 160000 Runtime: 0.592
+Search Size: 320000 Runtime: 1.245
+Search Size: 640000 Runtime: 2.882
+
+Q9. Make a prediction: how long will `findPerfectsSmarter` take to reach the fifth perfect number?
+A9: Using a linear regression algorithm, I found the line of best fit to be Time = 4.34E-06*(search size) + 5.64E-03.
+    Plugging in '33550336' ( the value for the fifth perfect number ) as our new search size returns a value of about 145.6 seconds.
+    MUCH less than the exhaustive function gave us.
+
+Q10. Explain how you chose your specific test cases and why they lead you to be confident `findNthPerfectEuclid` is working correctly.
+A10: The specific test cases that lead me to be confident that 'findNthPerfectEuclid' was working correctly was
+     simply by running a test to see if it would in fact find the correct nth perfect number from n = 1 to n = 5.
+
+
+Soundex
+-------
+
+Q11. What is the Soundex code for "Angelou"? What is the code for your own surname?
+A11: Angelou - A524
+     my surname : Raman - R550
+
+Q12. Before writing any code, brainstorm your plan of attack and sketch how you might decompose the work into smaller tasks. Briefly describe your decomposition strategy.
+A12: The first thing to do is format the original string to all caps and the whitespace/non alphabets chars removed. Then, create an empty string that will hold the returned value. Then we for each loop through the entered string, and decode all the characters to their respective character.
+     Afterwards, the code should eliminate all adjacent duplicate characters by for looping again, or perhaps in the same for loop as earlier. Then the code should swap the first character of the return string with the first character of the original string (capitalized).
+     Lastly, the code should truncate to 4 characters if it is longer than that, or append as many 0's as needed to reach 4 characters.
+
+Q13. Think about one or more examples of a class of names that the Soundex system might not work well for. Explain what this class of names is and why the system might incorrectly group them or mis-categorize one of the names.
+A13: Names with accents in the alphabets probably will not work well since the accented letters are still alphabets, however the soundex function does not recognize such characters and will return 0's for all accented characters.
+

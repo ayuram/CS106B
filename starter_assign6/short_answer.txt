@@ -1,0 +1,45 @@
+Q1. Use the above encoding tree to decode the bit sequence `0101100011`.
+A1. MOONS
+
+Q2. Prepare a table for the above encoding tree that lists each character with its assigned bit sequence.
+Use your table to encode the string `"SONS"`.
+A2. M - 010
+    N - 00
+    O - 1
+    S - 011
+
+    SONS : 011100011
+
+Q3. Huffman codes obey the _prefix_ property: no character's encoded bit sequence is a prefix of any other.
+What feature of an encoding tree demonstrates that it obeys the prefix property?
+A3. Since all the values are held on leaves (nodes with no children), the prefix property is held because you cannot move any further down the tree from the leaf node.
+
+Q4. Flatten the encoding tree above on the right into its sequence of bits and sequence of characters.
+A4. 101000
+    NMSO
+
+Q5. Unflatten the sequences `110100100` and `FLERA` to reconstruct the original encoding tree.
+A5. F - 00
+    L - 010
+    E - 011
+    R - 10
+    A - 11
+
+Q6. Construct a Huffman coding tree for the input `"BOOKKEEPER"`.
+A6. B - 0000
+    P - 0001
+    R - 001
+    E - 01
+    O - 10
+    K - 11
+    BPREOK
+
+Q7. A node in a Huffman coding tree has two non-null children or no children.
+Why does it not make sense for a node in a Huffman tree to have just one non-null child?
+A7. There are two reasons why this doesn't really make sense. The first is that having only 1 non-null child eliminates the benefits and the logic of having a tree in the first place, and makes the data structure more like a linked list.
+    The second reason it doesn't make sense is that the Huffman compression algorithm gives each tree two children as an assertion, based on how it empties from the priority queue. Whether that child be a leaf or another subtree, it still obeys the rule of having dequeued 2 elements.
+
+Q8. Describe the difference in shape of a Huffman coding tree that will lead to significant
+savings for compression versus one that will achieve little to no compression.
+A8. The tree is actually unbalanced by design, with the left subtree carrying a lot more nodes than the right. However, this is what ironically helps with the compression since the elements on the right are accessed far more frequently.
+    Because they are so close to the root node, the depth to actually reach those elements is extremely low. If it were balanced, the tree wouldn't really be doing any compression at that point.

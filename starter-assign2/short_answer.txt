@@ -1,0 +1,58 @@
+Warmup
+------
+Q1. The display of the Stack in the debugger uses the labels `top` and `bottom` to mark the two ends of the stack. How are the contents labeled when the Stack contains only one element?
+A1: The single label is : 'bottom/top'.
+
+Q2. For which type of inputs does the function produce a correct result?
+A2: The input produces a correct result only when the input has no negative values.
+
+Q3. For which type of inputs does the function go into an infinite loop?
+A3: When the input has only negatives, it goes into an infinite loop.
+
+Q4. What is the bug within `duplicateNegatives` that causes it to get stuck in an infinite loop?
+A4: Because q.size() is called in the for loop, in a case where all inputs are negative the size will grow perpetually,
+    meaning the program will be stuck in the for loop.
+
+Q5. What is the value of the variables (as reported in the debugger variable pane) right before the program crashes? What happens if you try to step over the line where the program crashes?
+A5: The 'map' variable does actually remove the key value pair right before the program crashes,
+    however stepping over the line where the program crashes causes the debugger to close and the variables to no longer be visible, indicating the program crashed.
+
+Maze
+-------
+Q6. So far in this class, we've passed our data structures by reference. Why do you think `checkSolution` passes `path` by value instead of by reference?
+A6: 'Path' is passed by value instead of by reference since the value of path, in this case, is being modified by the pop() method. So to maintain the original data structure, we pass by value instead of reference.
+
+Q7. After you have written your tests, describe your testing strategy to determine that your checkSolution works as intended.
+A7: My testing strategy was to test the extreme cases, such as repeats, loops, and invalid paths to test whether or not it throws the correct error message.
+
+Search Engine
+-------------
+Q8: Draw out the inverted index for the `res/tiny.txt` database file.
+A8: {
+        "red" : { "www.dr.seuss.net", "www.rainbow.org" },
+        "blue" : { "www.dr.seuss.net", "www.rainbow.org" },
+        "fish" : { "www.dr.seuss.net", "www.shoppinglist.com" },
+        "milk" : { "www.shoppinglist.com" },
+        "bread" : { "www.shoppinglist.com" },
+        "green" : {  "www.rainbow.org" },
+	"cheese" : { "www.shoppinglist.com" },
+        "i'm" : { "www.bigbadwolf.com" },
+	"not" : { "www.bigbadwolf.com" },
+    } ...there's more but I think the point is clear by now.
+
+Beyond Algorithmic Analysis
+---------------------------
+Q9: In a short paragraph, describe a real or plausible scenario not previously presented in lecture in which using techniques like Big-O or Asymptotic Analysis to improve the performance of an algorithm might benefit the environment. Include your thoughts on how a software engineer working on this piece of code might identify such potential benefits and take them into consideration when designing the code.
+A9: When thinking of Big-O, it's probably most common to jump directly to the programmatical applications of shortening the compute cycles.
+    However, since what we are programming is just abstractions, I think the example of Google Maps is perfect for how Big-O can do its part to save the environment.
+    Finding the shortest path, as I sort of did with the maze in this assignment, can have huge environmental benefits, especially if the cars using the maps are run by fossil fuels.
+
+Q10: According to the contract that IBM struck with the state of Indiana, the criteria for optimization were improving efficiency of the overall welfare system and reducing fraud. Criteria for reducing wait times and wrongful denials were not included.  However, wrongfully denying benefits has a huge negative  impact on the citizens who rely on the system.  If criteria like minimizing wrongful denials were not included in the contract, should engineers have included them in their optimization algorithm?  Why or why not?
+A10: Sticking with what we've learned so far, it would probably still be a good idea to include the systems to reduce wrongful denials even if it was not in the contract, since it will increase the reliability of the system.
+     Afterall, no one wants to be stuck using a faulty system, and we are ethical programmers afterall.
+
+Q11: Imagine that after completing CS106B you are hired at IBM as an engineer working on this system. How might you have approached designing and setting the goals of this system?  How might you apply algorithmic analysis tools to build a system that achieved  the desired goals? Could you do so in a way that avoids the severe negative impacts on users of the system that are outlined in the case study?
+A11: To design such a system, it's important to keep both the cycle times (Big-O) and the functionality. Any decision that slashes functionality at the benefit of Big-O is a bad decision, but there needs to be a balance.
+     In cases such as the long wait times, Big-O notation does come to solve the problem and using a Map data structure or something similar could solve this problem.
+     However, in cases such as disappearing documents it is important to increase the cycle times a little bit so as to ensure no documents are lost. Maybe keeping and updating backup data structures would be a good failsafe.
+
